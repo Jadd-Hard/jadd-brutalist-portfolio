@@ -1,0 +1,49 @@
+---
+// The main shell of the website. Nav and Footer appear here.
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Jadd Steinhard — Creative Hybrid" } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content={description} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="/src/styles/global.css" />
+		<title>{title}</title>
+	</head>
+	<body>
+		<nav class="nav">
+			<div class="wordmark">
+				<img src="/logo.png" alt="Jadd Steinhard Logo" class="logo-img" />
+				Jadd.
+			</div>
+			<div class="nav-links">
+				<a href="/" class="nav-link active">Work</a>
+				<a href="/about" class="nav-link">About</a>
+				<a href="/contact" class="nav-link">Contact</a>
+			</div>
+			<a href="/contact" class="contact-btn">Contact Us</a>
+		</nav>
+
+		<main>
+			<slot />
+		</main>
+
+		<footer class="footer">
+			<div class="footer-content">
+				<span>© 2026 Jadd Steinhard</span>
+				<span>Johannesburg, South Africa</span>
+			</div>
+		</footer>
+	</body>
+</html>
