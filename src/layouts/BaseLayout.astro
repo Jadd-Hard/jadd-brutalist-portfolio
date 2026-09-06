@@ -65,7 +65,7 @@ const { title, description = "Jadd Steinhard — Creative Hybrid" } = Astro.prop
 
 			// 1. Smooth Scroll (Lenis)
 			const lenis = new Lenis();
-			function raf(time) {
+			function raf(time: number) {
 				lenis.raf(time);
 				requestAnimationFrame(raf);
 			}
@@ -82,9 +82,9 @@ const { title, description = "Jadd Steinhard — Creative Hybrid" } = Astro.prop
 			}
 
 			// 3. Custom Cursor
-			const cursor = document.querySelector('.custom-cursor');
+			const cursor = document.querySelector<HTMLElement>('.custom-cursor');
 
-			if (!isTouchDevice && !prefersReducedMotion) {
+			if (!isTouchDevice && !prefersReducedMotion && cursor) {
 				document.body.classList.add('custom-cursor-active');
 				let mouseX = 0, mouseY = 0;
 				window.addEventListener('mousemove', (e) => {
