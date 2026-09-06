@@ -98,7 +98,7 @@ a {
 .logo-img {
   height: 32px;
   width: auto;
-  filter: invert(1); /* Turns your black logo white to match the pure void */
+  filter: invert(1); /* Turns your black logo white */
 }
 
 .nav-links {
@@ -180,4 +180,25 @@ a {
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
+}
+
+/* Custom Cursor */
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-chalk);
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-100px, -100px);
+}
+body.custom-cursor-active * {
+  cursor: none !important;
+}
+
+/* Hero Animation Initial States */
+[data-hero-reveal] {
+  will-change: transform, opacity;
 }
