@@ -1,5 +1,8 @@
 ---
 // The main shell of the website. Nav and Footer appear here.
+import '../styles/global.css';
+import '../scripts/main.js';
+
 interface Props {
   title: string;
   description?: string;
@@ -18,7 +21,6 @@ const { title, description = "Jadd Steinhard — Creative Hybrid" } = Astro.prop
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
-		<link rel="stylesheet" href="/src/styles/global.css" />
 		<title>{title}</title>
 	</head>
 	<body>
@@ -48,7 +50,5 @@ const { title, description = "Jadd Steinhard — Creative Hybrid" } = Astro.prop
 
 		<!-- Custom Cursor Element -->
 		<div class="custom-cursor" aria-hidden="true"></div>
-
-		<script src="/src/scripts/main.js"></script>
 	</body>
 </html>
