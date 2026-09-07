@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Read files from the public/content/clients folder
+const clientDir = path.join(process.cwd(), 'public', 'content', 'clients');
+let clientFiles: string[] = [];
+if (fs.existsSync(clientDir)) {
+  clientFiles = fs.readdirSync(clientDir).filter(file => /\.(png|jpe?g|svg|webp)$/i.test(file));
+}
+const logos = clientFiles.map(file => `/content/clients/${file}`);
+// Duplicate the logos twice so the loop is seamless and never ends
+const marqueeLogos = [...logos, ...logos];
+---
+
+<BaseLayout title="Clients & Brands — Jadd Steinhard">
+	<section class="clients-section">
+		<h1 class="display-headline">Trusted by Visionaries.</h1>
+		<p class="sub-body">Global brands, international tours, and luxury hospitality partners.</p>
+
+		{logos.length > 0 ? (
+			<div class="marquee-container">
+				<!-- Single row scrolling left -->
+				<div class="marquee-row">
+					<div class="marquee-track scroll-left">
+						{marqueeLogos.map((img) => (
+							<div class="client-tile">
+								<img src={img} alt="Client logo" loading="lazy" />
+							</div>
+						))}
+					</div>
+				</div>
+			</div>
+		) : (
+			<div class="placeholder-text">
+				<p>[TODO: Jadd — Drop your client logo files into the `public/content/clients` folder on your computer. They will automatically appear here.]</p>
+			</div>
+		)}
+	</section>
+</BaseLayout>

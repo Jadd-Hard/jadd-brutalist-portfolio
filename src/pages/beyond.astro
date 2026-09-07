@@ -1,9 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
 
-// Auto-scan the "beyond" folder for your personal images (musician, motocross, etc.)
-const beyondImages = import.meta.glob('../content/beyond/*.{jpg,jpeg,png,webp,gif}', { eager: true, query: { as: 'image' } });
-const getAllImages = (obj) => Object.values(obj);
+// Read files from the public/content/beyond folder
+const beyondDir = path.join(process.cwd(), 'public', 'content', 'beyond');
+let beyondFiles: string[] = [];
+if (fs.existsSync(beyondDir)) {
+  beyondFiles = fs.readdirSync(beyondDir).filter(file => /\.(png|jpe?g|svg|webp|gif)$/i.test(file));
+}
+const beyondImages = beyondFiles.map(file => `/content/beyond/${file}`);
 ---
 
 <BaseLayout title="Beyond The Stage — Jadd Steinhard">
@@ -29,13 +35,13 @@ const getAllImages = (obj) => Object.values(obj);
 
 			<!-- Auto-generated visual grid -->
 			<div class="beyond-grid">
-				{getAllImages(beyondImages).length > 0 ? getAllImages(beyondImages).map((img) => (
+				{beyondImages.length > 0 ? beyondImages.map((img) => (
 					<div class="beyond-tile">
-						<img src={img.default.src} alt="Beyond the stage visual" loading="lazy" />
+						<img src={img} alt="Beyond the stage visual" loading="lazy" />
 					</div>
 				)) : (
 					<div class="placeholder-text">
-						<p>[TODO: Jadd — Drop your personal photos (motocross, mountain biking, music) into the `content/beyond` folder to make this section explode with personality.]</p>
+						<p>[TODO: Jadd — Drop your personal photos (motocross, mountain biking, music) into the `public/content/beyond` folder to make this section explode with personality.]</p>
 					</div>
 				)}
 			</div>
