@@ -8,6 +8,9 @@ interface Props {
 }
 
 const { title, description = "Jadd Steinhard — Creative Hybrid" } = Astro.props;
+
+// Dynamic Navigation: The orange active light follows the URL path
+const pathname = Astro.url.pathname;
 ---
 
 <!DOCTYPE html>
@@ -29,10 +32,10 @@ const { title, description = "Jadd Steinhard — Creative Hybrid" } = Astro.prop
 				Jadd.
 			</div>
 			<div class="nav-links">
-				<a href="/" class="nav-link">Home</a>
-				<a href="/work" class="nav-link active">Work</a>
-				<a href="/beyond" class="nav-link">Beyond</a>
-				<a href="/contact" class="nav-link">Contact</a>
+				<a href="/" class={`nav-link ${pathname === '/' ? 'active' : ''}`}>Home</a>
+				<a href="/work" class={`nav-link ${pathname.startsWith('/work') ? 'active' : ''}`}>Work</a>
+				<a href="/beyond" class={`nav-link ${pathname.startsWith('/beyond') ? 'active' : ''}`}>Beyond</a>
+				<a href="/contact" class={`nav-link ${pathname.startsWith('/contact') ? 'active' : ''}`}>Contact</a>
 			</div>
 			<a href="/contact" class="contact-btn">Availability</a>
 		</nav>
@@ -59,12 +62,9 @@ const { title, description = "Jadd Steinhard — Creative Hybrid" } = Astro.prop
 
 			gsap.registerPlugin(ScrollTrigger);
 
-			// Respects users who have "reduce motion" turned on in their OS settings
 			const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-			// Detect if user is on a touch device (phone or tablet)
 			const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
 
-			// 1. Smooth Scroll (Lenis)
 			const lenis = new Lenis();
 			function raf(time: number) {
 				lenis.raf(time);
@@ -72,7 +72,6 @@ const { title, description = "Jadd Steinhard — Creative Hybrid" } = Astro.prop
 			}
 			requestAnimationFrame(raf);
 
-			// 2. Hero Text Animation
 			if (!prefersReducedMotion) {
 				gsap.set('[data-hero-reveal]', { opacity: 0, y: 20 });
 				ScrollTrigger.batch('[data-hero-reveal]', {
@@ -82,7 +81,6 @@ const { title, description = "Jadd Steinhard — Creative Hybrid" } = Astro.prop
 				gsap.set('[data-hero-reveal]', { opacity: 1, y: 0 });
 			}
 
-			// 3. Custom Cursor
 			const cursor = document.querySelector<HTMLElement>('.custom-cursor');
 
 			if (!isTouchDevice && !prefersReducedMotion && cursor) {

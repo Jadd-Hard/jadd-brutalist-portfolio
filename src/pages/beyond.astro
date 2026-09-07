@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Auto-scan the "beyond" folder for your personal images (musician, motocross, etc.)
+const beyondImages = import.meta.glob('../content/beyond/*.{jpg,jpeg,png,webp,gif}', { eager: true, query: { as: 'image' } });
+const getAllImages = (obj) => Object.values(obj);
+---
+
+<BaseLayout title="Beyond The Stage — Jadd Steinhard">
+	<section class="beyond-section">
+		<h1 class="display-headline">Beyond The Stage.</h1>
+		<p class="sub-body">The composure isn't accidental. It's trained in the places where the pressure is real.</p>
+
+		<div class="beyond-content">
+			<div class="beyond-text">
+				<div class="beyond-block">
+					<h2 class="heading-lg">Musician Background</h2>
+					<p>An active musician with recording and live-performance experience, providing a visceral understanding of stage dynamics, technical requirements, and audience engagement.</p>
+				</div>
+				<div class="beyond-block">
+					<h2 class="heading-lg">Artist Mentorship</h2>
+					<p>Independent experience mentoring and developing emerging musical talent, including brand positioning, live-performance strategy, and commercial growth.</p>
+				</div>
+				<div class="beyond-block">
+					<h2 class="heading-lg">Motocross & Mountain Biking</h2>
+					<p>High-adrenaline sports that demand split-second decision-making and absolute calm. It's not a hobby; it's the training ground for high-stakes live environments.</p>
+				</div>
+			</div>
+
+			<!-- Auto-generated visual grid -->
+			<div class="beyond-grid">
+				{getAllImages(beyondImages).length > 0 ? getAllImages(beyondImages).map((img) => (
+					<div class="beyond-tile">
+						<img src={img.default.src} alt="Beyond the stage visual" loading="lazy" />
+					</div>
+				)) : (
+					<div class="placeholder-text">
+						<p>[TODO: Jadd — Drop your personal photos (motocross, mountain biking, music) into the `content/beyond` folder to make this section explode with personality.]</p>
+					</div>
+				)}
+			</div>
+		</div>
+	</section>
+</BaseLayout>
