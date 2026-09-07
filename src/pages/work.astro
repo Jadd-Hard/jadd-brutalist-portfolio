@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Scan the folders for your uploaded artwork
+const eventsImages = import.meta.glob('../content/artwork/events-tours/*.{jpg,jpeg,png,webp,gif,mp4}', { eager: true, query: { as: 'image' } });
+const brandingImages = import.meta.glob('../content/artwork/graphic-design-branding/*.{jpg,jpeg,png,webp,gif,mp4}', { eager: true, query: { as: 'image' } });
+const motionImages = import.meta.glob('../content/artwork/motion-graphics-animation/*.{jpg,jpeg,png,webp,gif,mp4}', { eager: true, query: { as: 'image' } });
+const videoImages = import.meta.glob('../content/artwork/video-production/*.{jpg,jpeg,png,webp,gif,mp4}', { eager: true, query: { as: 'image' } });
+const uiuxImages = import.meta.glob('../content/artwork/ui-ux-web-design/*.{jpg,jpeg,png,webp,gif,mp4}', { eager: true, query: { as: 'image' } });
+
+const getAllImages = (obj) => Object.values(obj);
+---
+
+<BaseLayout title="Work — Jadd Steinhard">
+	<section class="work-section">
+		<h1 class="display-headline">Selected Work.</h1>
+		<p class="sub-body">A diverse blend of creative, technical, and soft skills to design, animate, and produce engaging content.</p>
+
+		<!-- Events / Tours Operations -->
+		<div class="work-category">
+			<p class="section-label">Events & Tours Operations</p>
+			<div class="work-grid">
+				{getAllImages(eventsImages).length > 0 ? getAllImages(eventsImages).map((img) => (
+					<div class="work-tile">
+						<img src={img.default.src} alt="Event or Tour visual" loading="lazy" />
+					</div>
+				)) : (
+					<p class="placeholder-text">[TODO: Jadd — Drop your Events/Tours artwork here]</p>
+				)}
+			</div>
+		</div>
+
+		<!-- Brand Campaigns & Advertising -->
+		<div class="work-category">
+			<p class="section-label">Brand Campaigns & Advertising</p>
+			<div class="work-grid">
+				{getAllImages(brandingImages).length > 0 ? getAllImages(brandingImages).map((img) => (
+					<div class="work-tile">
+						<img src={img.default.src} alt="Brand identity or campaign visual" loading="lazy" />
+					</div>
+				)) : (
+					<p class="placeholder-text">[TODO: Jadd — Drop your Branding artwork here]</p>
+				)}
+			</div>
+		</div>
+
+		<!-- Motion Graphics & Animation -->
+		<div class="work-category">
+			<p class="section-label">Motion Graphics & Animation</p>
+			<div class="work-grid">
+				{getAllImages(motionImages).length > 0 ? getAllImages(motionImages).map((img) => (
+					<div class="work-tile">
+						<img src={img.default.src} alt="Motion graphic visual" loading="lazy" />
+					</div>
+				)) : (
+					<p class="placeholder-text">[TODO: Jadd — Drop your Motion Graphics artwork here]</p>
+				)}
+			</div>
+		</div>
+
+		<!-- Video Production -->
+		<div class="work-category">
+			<p class="section-label">Video Production</p>
+			<div class="work-grid">
+				{getAllImages(videoImages).length > 0 ? getAllImages(videoImages).map((img) => (
+					<div class="work-tile">
+						<img src={img.default.src} alt="Video production visual" loading="lazy" />
+					</div>
+				)) : (
+					<p class="placeholder-text">[TODO: Jadd — Drop your Video Production artwork here]</p>
+				)}
+			</div>
+		</div>
+
+		<!-- UI/UX & Web Design -->
+		<div class="work-category">
+			<p class="section-label">UI/UX & Web Design</p>
+			<div class="work-grid">
+				{getAllImages(uiuxImages).length > 0 ? getAllImages(uiuxImages).map((img) => (
+					<div class="work-tile">
+						<img src={img.default.src} alt="UI/UX web design visual" loading="lazy" />
+					</div>
+				)) : (
+					<p class="placeholder-text">[TODO: Jadd — Drop your UI/UX artwork here]</p>
+				)}
+			</div>
+		</div>
+	</section>
+</BaseLayout>

@@ -112,7 +112,6 @@ a {
   font-weight: 500;
 }
 
-/* The ONLY element in the entire system that gets the orange color */
 .nav-link.active {
   color: var(--color-ember-signal);
 }
@@ -147,6 +146,13 @@ a {
   font-feature-settings: "ss01" on;
   color: var(--color-chalk);
   margin-bottom: var(--spacing-64);
+}
+
+.sub-body {
+  color: var(--color-ash);
+  font-size: 15px;
+  line-height: 1.5;
+  max-width: 350px;
 }
 
 /* Scroll Prompt */
@@ -195,4 +201,84 @@ body.custom-cursor-active * {
 /* Hero Animation Initial States */
 [data-hero-reveal] {
   will-change: transform, opacity;
+}
+
+/* About Page Styles (Kept in case you want it later) */
+.about-section {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-128) var(--spacing-24) var(--spacing-64);
+}
+
+.portrait-placeholder {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  background-color: var(--color-cinder);
+  border: 1px solid var(--color-carbon);
+}
+
+.about-text {
+  max-width: 700px;
+}
+
+.about-text .display-headline {
+  margin-bottom: var(--spacing-24);
+  font-size: clamp(38px, 8vw, 76px);
+}
+
+.about-copy {
+  color: var(--color-ash);
+  font-size: 15px;
+  line-height: 1.5;
+  max-width: 600px;
+}
+
+.about-copy p {
+  margin-bottom: var(--spacing-24);
+}
+
+/* Work Page Styles */
+.work-section {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-128) var(--spacing-24) var(--spacing-64);
+}
+
+.work-section .display-headline {
+  margin-bottom: var(--spacing-24);
+}
+
+.work-category {
+  margin-top: var(--spacing-128);
+}
+
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-4); /* 4px gap between grid cells */
+  margin-top: var(--spacing-24);
+}
+
+.work-tile {
+  border: 1px solid var(--color-carbon);
+  background-color: var(--color-void);
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+}
+
+.work-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.placeholder-text {
+  color: var(--color-graphite);
+  font-size: 13px;
+  border: 1px dashed var(--color-carbon);
+  padding: var(--spacing-24);
+  width: 100%;
+  text-align: center;
 }
