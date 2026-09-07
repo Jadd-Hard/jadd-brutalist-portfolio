@@ -3,21 +3,72 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import fs from 'node:fs';
 import path from 'node:path';
 
-// Read files from the public/content/artwork folders
-function getFilesFromFolder(folderName: string): string[] {
-  const dir = path.join(process.cwd(), 'public', 'content', 'artwork', folderName);
-  let files: string[] = [];
-  if (fs.existsSync(dir)) {
-    files = fs.readdirSync(dir).filter(file => /\.(png|jpe?g|svg|webp|gif|mp4)$/i.test(file));
+// Helper to read a single project folder
+function getProject(folderPath: string) {
+  const files = fs.readdirSync(folderPath);
+  const infoFile = files.find(f => f === 'info.txt');
+  const images = files.filter(f => /\.(png|jpe?g|svg|webp|gif)$/i.test(f));
+
+  let title = path.basename(folderPath).replace(/-/g, ' ');
+  let subtitle = '';
+  const sections: { heading: string; text: string }[] = [];
+
+  if (infoFile) {
+    const content = fs.readFileSync(path.join(folderPath, infoFile), 'utf-8');
+    const lines = content.split('\n');
+    const allowedKeys = [
+      'Title', 'Subtitle', 'Vision', 'Feedback & Ethics', 'Growth & Wellbeing', 
+      'Brand & Community', 'Creative Process', 'Visual Identity', 'Graphic Layer & Typography'
+    ];
+
+    lines.forEach(line => {
+      const [key, ...rest] = line.split(':');
+      const value = rest.join(':').trim();
+      if (!value) return;
+
+      if (key.trim().toLowerCase() === 'title') {
+        title = value;
+      } else if (key.trim().toLowerCase() === 'subtitle') {
+        subtitle = value;
+      } else if (allowedKeys.some(k => k.toLowerCase() === key.trim().toLowerCase() && k !== 'Title' && k !== 'Subtitle')) {
+        sections.push({ heading: key.trim(), text: value });
+      }
+    });
   }
-  return files.map(file => `/content/artwork/${folderName}/${file}`);
+
+  return {
+    title,
+    subtitle,
+    images: images.map(img => `/content/artwork/${path.basename(path.dirname(folderPath))}/${path.basename(folderPath)}/${img}`),
+    sections
+  };
 }
 
-const eventsImages = getFilesFromFolder('events-tours');
-const brandingImages = getFilesFromFolder('graphic-design-branding');
-const motionImages = getFilesFromFolder('motion-graphics-animation');
-const videoImages = getFilesFromFolder('video-production');
-const uiuxImages = getFilesFromFolder('ui-ux-web-design');
+function getProjects(category: string) {
+  const baseDir = path.join(process.cwd(), 'public', 'content', 'artwork', category);
+  if (!fs.existsSync(baseDir)) return [];
+
+  const directories = fs.readdirSync(baseDir, { withFileTypes: true })
+    .filter(dirent => dirent.isDirectory())
+    .map(dirent => dirent.name);
+
+  const singleImages = fs.readdirSync(baseDir).filter(file => /\.(png|jpe?g|svg|webp|gif)$/i.test(file))
+    .map(file => ({
+      title: path.parse(file).name.replace(/-/g, ' '),
+      subtitle: '',
+      images: [`/content/artwork/${category}/${file}`],
+      sections: []
+    }));
+
+  const projects = directories.map(dir => getProject(path.join(baseDir, dir)));
+  return [...singleImages, ...projects].sort((a, b) => a.title.localeCompare(b.title));
+}
+
+const eventsProjects = getProjects('events-tours');
+const brandingProjects = getProjects('graphic-design-branding');
+const motionProjects = getProjects('motion-graphics-animation');
+const videoProjects = getProjects('video-production');
+const uiuxProjects = getProjects('ui-ux-web-design');
 ---
 
 <BaseLayout title="Work — Jadd Steinhard">
@@ -25,27 +76,28 @@ const uiuxImages = getFilesFromFolder('ui-ux-web-design');
 		<h1 class="display-headline">Selected Work.</h1>
 		<p class="sub-body">A diverse blend of creative, technical, and soft skills to design, animate, and produce engaging content.</p>
 
-		<!-- Events / Tours Operations -->
-		<div class="work-category">
-			<p class="section-label">Events & Tours Operations</p>
-			<div class="work-grid">
-				{eventsImages.length > 0 ? eventsImages.map((img) => (
-					<div class="work-tile">
-						<img src={img} alt="Event or Tour visual" loading="lazy" />
-					</div>
-				)) : (
-					<p class="placeholder-text">[TODO: Jadd — Drop your Events/Tours artwork here]</p>
-				)}
-			</div>
-		</div>
-
 		<!-- Brand Campaigns & Advertising -->
-		<div class="work-category">
+		<div class="case-study-block">
 			<p class="section-label">Brand Campaigns & Advertising</p>
-			<div class="work-grid">
-				{brandingImages.length > 0 ? brandingImages.map((img) => (
-					<div class="work-tile">
-						<img src={img} alt="Brand identity or campaign visual" loading="lazy" />
+			<div class="case-study-container">
+				{brandingProjects.length > 0 ? brandingProjects.map((project) => (
+					<div class="case-study-row" data-case-reveal>
+						<div class="case-study-gallery">
+							{project.images.map((img) => (
+								<div class="case-study-image"><img src={img} alt={project.title} loading="lazy" /></div>
+							))}
+						</div>
+						<div class="case-study-content">
+							<h2 class="case-title">{project.title}</h2>
+							{project.subtitle && <p class="case-subtitle">{project.subtitle}</p>}
+							
+							{project.sections.map((section) => (
+								<div class="case-detail">
+									<h3>{section.heading}</h3>
+									<p>{section.text}</p>
+								</div>
+							))}
+						</div>
 					</div>
 				)) : (
 					<p class="placeholder-text">[TODO: Jadd — Drop your Branding artwork here]</p>
@@ -53,13 +105,57 @@ const uiuxImages = getFilesFromFolder('ui-ux-web-design');
 			</div>
 		</div>
 
+		<!-- Events / Tours Operations -->
+		<div class="case-study-block">
+			<p class="section-label">Events & Tours Operations</p>
+			<div class="case-study-container">
+				{eventsProjects.length > 0 ? eventsProjects.map((project) => (
+					<div class="case-study-row" data-case-reveal>
+						<div class="case-study-gallery">
+							{project.images.map((img) => (
+								<div class="case-study-image"><img src={img} alt={project.title} loading="lazy" /></div>
+							))}
+						</div>
+						<div class="case-study-content">
+							<h2 class="case-title">{project.title}</h2>
+							{project.subtitle && <p class="case-subtitle">{project.subtitle}</p>}
+							
+							{project.sections.map((section) => (
+								<div class="case-detail">
+									<h3>{section.heading}</h3>
+									<p>{section.text}</p>
+								</div>
+							))}
+						</div>
+					</div>
+				)) : (
+					<p class="placeholder-text">[TODO: Jadd — Drop your Events/Tours artwork here]</p>
+				)}
+			</div>
+		</div>
+
 		<!-- Motion Graphics & Animation -->
-		<div class="work-category">
+		<div class="case-study-block">
 			<p class="section-label">Motion Graphics & Animation</p>
-			<div class="work-grid">
-				{motionImages.length > 0 ? motionImages.map((img) => (
-					<div class="work-tile">
-						<img src={img} alt="Motion graphic visual" loading="lazy" />
+			<div class="case-study-container">
+				{motionProjects.length > 0 ? motionProjects.map((project) => (
+					<div class="case-study-row" data-case-reveal>
+						<div class="case-study-gallery">
+							{project.images.map((img) => (
+								<div class="case-study-image"><img src={img} alt={project.title} loading="lazy" /></div>
+							))}
+						</div>
+						<div class="case-study-content">
+							<h2 class="case-title">{project.title}</h2>
+							{project.subtitle && <p class="case-subtitle">{project.subtitle}</p>}
+							
+							{project.sections.map((section) => (
+								<div class="case-detail">
+									<h3>{section.heading}</h3>
+									<p>{section.text}</p>
+								</div>
+							))}
+						</div>
 					</div>
 				)) : (
 					<p class="placeholder-text">[TODO: Jadd — Drop your Motion Graphics artwork here]</p>
@@ -68,12 +164,27 @@ const uiuxImages = getFilesFromFolder('ui-ux-web-design');
 		</div>
 
 		<!-- Video Production -->
-		<div class="work-category">
+		<div class="case-study-block">
 			<p class="section-label">Video Production</p>
-			<div class="work-grid">
-				{videoImages.length > 0 ? videoImages.map((img) => (
-					<div class="work-tile">
-						<img src={img} alt="Video production visual" loading="lazy" />
+			<div class="case-study-container">
+				{videoProjects.length > 0 ? videoProjects.map((project) => (
+					<div class="case-study-row" data-case-reveal>
+						<div class="case-study-gallery">
+							{project.images.map((img) => (
+								<div class="case-study-image"><img src={img} alt={project.title} loading="lazy" /></div>
+							))}
+						</div>
+						<div class="case-study-content">
+							<h2 class="case-title">{project.title}</h2>
+							{project.subtitle && <p class="case-subtitle">{project.subtitle}</p>}
+							
+							{project.sections.map((section) => (
+								<div class="case-detail">
+									<h3>{section.heading}</h3>
+									<p>{section.text}</p>
+								</div>
+							))}
+						</div>
 					</div>
 				)) : (
 					<p class="placeholder-text">[TODO: Jadd — Drop your Video Production artwork here]</p>
@@ -82,12 +193,27 @@ const uiuxImages = getFilesFromFolder('ui-ux-web-design');
 		</div>
 
 		<!-- UI/UX & Web Design -->
-		<div class="work-category">
+		<div class="case-study-block">
 			<p class="section-label">UI/UX & Web Design</p>
-			<div class="work-grid">
-				{uiuxImages.length > 0 ? uiuxImages.map((img) => (
-					<div class="work-tile">
-						<img src={img} alt="UI/UX web design visual" loading="lazy" />
+			<div class="case-study-container">
+				{uiuxProjects.length > 0 ? uiuxProjects.map((project) => (
+					<div class="case-study-row" data-case-reveal>
+						<div class="case-study-gallery">
+							{project.images.map((img) => (
+								<div class="case-study-image"><img src={img} alt={project.title} loading="lazy" /></div>
+							))}
+						</div>
+						<div class="case-study-content">
+							<h2 class="case-title">{project.title}</h2>
+							{project.subtitle && <p class="case-subtitle">{project.subtitle}</p>}
+							
+							{project.sections.map((section) => (
+								<div class="case-detail">
+									<h3>{section.heading}</h3>
+									<p>{section.text}</p>
+								</div>
+							))}
+						</div>
 					</div>
 				)) : (
 					<p class="placeholder-text">[TODO: Jadd — Drop your UI/UX artwork here]</p>

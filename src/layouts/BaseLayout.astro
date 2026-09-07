@@ -74,15 +74,34 @@ const pathname = Astro.url.pathname;
 			}
 			requestAnimationFrame(raf);
 
+			// 1. Hero Text Animation
 			if (!prefersReducedMotion) {
 				gsap.set('[data-hero-reveal]', { opacity: 0, y: 20 });
 				ScrollTrigger.batch('[data-hero-reveal]', {
 					onEnter: batch => gsap.to(batch, { opacity: 1, y: 0, stagger: 0.1, duration: 1, ease: "power3.out" })
 				});
+
+				// 2. Case Study Block Reveal (The new motion!)
+				gsap.utils.toArray('[data-case-reveal]').forEach((row, index) => {
+					gsap.from(row.children, {
+						opacity: 0,
+						y: 50,
+						duration: 1.2,
+						ease: "power3.out",
+						stagger: 0.15,
+						scrollTrigger: {
+							trigger: row,
+							start: "top 85%",
+							toggleActions: "play none none none"
+						}
+					});
+				});
 			} else {
 				gsap.set('[data-hero-reveal]', { opacity: 1, y: 0 });
+				gsap.set('[data-case-reveal] > *', { opacity: 1, y: 0 });
 			}
 
+			// 3. Custom Cursor
 			const cursor = document.querySelector<HTMLElement>('.custom-cursor');
 
 			if (!isTouchDevice && !prefersReducedMotion && cursor) {
