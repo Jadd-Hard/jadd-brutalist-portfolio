@@ -409,7 +409,6 @@ body.custom-cursor-active * {
   max-height: 80%;
   object-fit: contain;
   display: block;
-  /* Forces ANY logo color to pure white for the void aesthetic */
   filter: brightness(0) invert(1);
 }
 
@@ -429,4 +428,106 @@ body.custom-cursor-active * {
     animation: none;
     transform: none;
   }
+}
+
+/* Resume Page Styles */
+.resume-section {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-128) var(--spacing-24) var(--spacing-64);
+}
+
+.resume-section .display-headline {
+  margin-bottom: var(--spacing-24);
+}
+
+.resume-actions {
+  margin-top: var(--spacing-64);
+  margin-bottom: var(--spacing-128);
+}
+
+.resume-block {
+  margin-bottom: var(--spacing-128);
+}
+
+.resume-block .section-label {
+  margin-bottom: var(--spacing-24);
+}
+
+.experience-item {
+  border-top: 1px solid var(--color-carbon);
+  padding-top: var(--spacing-24);
+  margin-bottom: var(--spacing-64);
+}
+
+.experience-item h2 {
+  font-size: var(--text-heading-lg);
+  margin-bottom: var(--spacing-8);
+}
+
+.role {
+  color: var(--color-chalk);
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: var(--spacing-8);
+}
+
+.date {
+  color: var(--color-graphite);
+  font-size: 13px;
+  margin-bottom: var(--spacing-16);
+}
+
+.desc {
+  color: var(--color-ash);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.core-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--color-carbon);
+}
+
+.core-column {
+  padding: var(--spacing-24);
+}
+
+.core-column + .core-column {
+  border-left: 1px solid var(--color-carbon);
+}
+
+.core-column h3 {
+  color: var(--color-chalk);
+  font-size: 20px;
+  margin-bottom: var(--spacing-16);
+}
+
+.core-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  color: var(--color-ash);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.core-column li {
+  margin-bottom: var(--spacing-8);
+}
+
+.tools-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-8);
+  max-width: 600px;
+}
+
+.tools-strip span {
+  border: 1px solid var(--color-fog);
+  color: var(--color-chalk);
+  padding: var(--spacing-4);
+  font-size: 13px;
+  font-weight: 500;
 }

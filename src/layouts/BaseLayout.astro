@@ -35,6 +35,7 @@ const pathname = Astro.url.pathname;
 				<a href="/" class={`nav-link ${pathname === '/' ? 'active' : ''}`}>Home</a>
 				<a href="/work" class={`nav-link ${pathname.startsWith('/work') ? 'active' : ''}`}>Work</a>
 				<a href="/clients" class={`nav-link ${pathname.startsWith('/clients') ? 'active' : ''}`}>Clients</a>
+				<a href="/resume" class={`nav-link ${pathname.startsWith('/resume') ? 'active' : ''}`}>Resume</a>
 				<a href="/beyond" class={`nav-link ${pathname.startsWith('/beyond') ? 'active' : ''}`}>Beyond</a>
 				<a href="/contact" class={`nav-link ${pathname.startsWith('/contact') ? 'active' : ''}`}>Contact</a>
 			</div>

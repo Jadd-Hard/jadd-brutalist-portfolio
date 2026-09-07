@@ -1,0 +1,110 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Read the resume PDF from the public/content/resume folder
+const resumeDir = path.join(process.cwd(), 'public', 'content', 'resume');
+let resumeFile = '';
+if (fs.existsSync(resumeDir)) {
+  const files = fs.readdirSync(resumeDir).filter(file => /\.pdf$/i.test(file));
+  if (files.length > 0) {
+    resumeFile = `/content/resume/${files[0]}`;
+  }
+}
+---
+
+<BaseLayout title="Resume — Jadd Steinhard">
+	<section class="resume-section">
+		<h1 class="display-headline">Resume.</h1>
+		<p class="sub-body">A detailed look at my professional experience, core capabilities, and technical environment.</p>
+
+		<div class="resume-actions">
+			{resumeFile ? (
+				<a href={resumeFile} download class="big-cta">Download PDF</a>
+			) : (
+				<p class="placeholder-text">[TODO: Jadd — Drop your Resume PDF into the `public/content/resume` folder. It will appear here.]</p>
+			)}
+		</div>
+
+		<!-- Professional Experience -->
+		<div class="resume-block">
+			<p class="section-label">Professional Experience</p>
+			
+			<div class="experience-item">
+				<h2 class="heading-lg">Technical Production</h2>
+				<p class="role">Club Med Luxury Resorts</p>
+				<p class="date">Maldives • Indonesia • China • Malaysia | 2023-2026</p>
+				<p class="desc">Directed technical production for 200+ live events annually. Managed delivery across sound, lighting, video and multimedia systems. Served as primary technical liaison for international artists, resort executives and VIP guests.</p>
+			</div>
+
+			<div class="experience-item">
+				<h2 class="heading-lg">Creative Production Director / Production Manager</h2>
+				<p class="role">Unity Management & Booking</p>
+				<p class="date">South Africa | 2011-Present</p>
+				<p class="desc">Plan and deliver live music events, national festivals, corporate activations and multi-city tours. Developed event identities and promotional creative. Introduced AI-assisted workflows, reducing production timelines by 40%.</p>
+			</div>
+
+			<div class="experience-item">
+				<h2 class="heading-lg">Creative & Multimedia Producer</h2>
+				<p class="role">Freelance Advertising Agency Consultant</p>
+				<p class="date">2008-Present</p>
+				<p class="desc">Collaborated with Cartel Digital, Electronic Media, Beutlegeuse Advertising and Doghouse Design Agency. Created brand identity concepts, visual systems, campaign artwork and motion graphics for brands like Adidas, Coca-Cola, MTN and Vodacom.</p>
+			</div>
+
+			<div class="experience-item">
+				<h2 class="heading-lg">Production & Festival Operations Manager</h2>
+				<p class="role">Flag & Fury Touring / Heritage Music</p>
+				<p class="date">International | 1999-2011</p>
+				<p class="desc">Managed international tour logistics across 8+ countries. Coordinated technical riders, staging, freight and customs. Led festival operations for events exceeding 5,000 single-day attendees.</p>
+			</div>
+		</div>
+
+		<!-- Core Capabilities -->
+		<div class="resume-block">
+			<p class="section-label">Core Capabilities</p>
+			<div class="core-grid">
+				<div class="core-column">
+					<h3>Multimedia Design</h3>
+					<ul>
+						<li>Brand identity</li>
+						<li>Campaign artwork</li>
+						<li>Posters</li>
+						<li>Video editing</li>
+						<li>Motion graphics</li>
+					</ul>
+				</div>
+				<div class="core-column">
+					<h3>Event & Production</h3>
+					<ul>
+						<li>Event management</li>
+						<li>Festival & tour production</li>
+						<li>Technical advancing</li>
+						<li>Show operations</li>
+						<li>Venue coordination</li>
+					</ul>
+				</div>
+				<div class="core-column">
+					<h3>Technical & Creative</h3>
+					<ul>
+						<li>Sound • Lighting • Video</li>
+						<li>Projection</li>
+						<li>Live visuals</li>
+						<li>Show control</li>
+						<li>Adobe • Figma</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<!-- Tools & Education -->
+		<div class="resume-block">
+			<p class="section-label">Tools, Education & Context</p>
+			<div class="tools-strip">
+				<span>Photoshop</span> <span>Illustrator</span> <span>Premiere Pro</span> <span>After Effects</span> <span>Figma</span> <span>Resolume</span> <span>MadMapper</span> <span>grandMA3</span> <span>DiGiCo</span> <span>Yamaha</span>
+			</div>
+			<p class="desc" style="margin-top: 24px;">Graphic Design Certification (Shaw Academy) | Sports Management Certificate (Boston City College) | Matric Certificate (Sandringham High School)</p>
+			<p class="desc" style="margin-top: 16px;">Active musician with recording and live-performance experience. Independent experience mentoring emerging musical talent. Extensive international exposure across Africa, Asia, Europe, Australia and the United States.</p>
+		</div>
+	</section>
+</BaseLayout>
